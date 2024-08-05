@@ -12,19 +12,29 @@ const choice = {
     img: "https://helloartsy.com/wp-content/uploads/kids/school/how-to-draw-paper/how-to-draw-paper-step-6.jpg"
   },
   scissors: {
-    name: "Rock",
+    name: "Scissors",
     img: "https://helloartsy.com/wp-content/uploads/kids/school/how-to-draw-scissors/how-to-draw-scissors-step-6.jpg"
   }
 } 
 function App() {
   const [userSelect, setUserSelect] = useState(null);
   const [computerSelect, setComputerSelect] = useState(null);
+  const [result, setResult] = useState("");
   
   const play = (userChoice) => {
     setUserSelect(choice[userChoice]);
     let computerChoice = randomChoice();
-    setComputerSelect(computerChoice)
+    setComputerSelect(computerChoice);
+    setResult(judgement(choice[userChoice], computerChoice));
   };
+
+  const judgement = (user, computer) => {
+    if(user.name === computer.name){
+      return "Tie"
+    }else if(user.name === "Rock") return computer.name === "Scissors"? "Win": "Lose"
+    else if(user.name === "Paper") return computer.name === "Scissors"? "Lose": "Win"
+    else if(user.name === "Scissors") return computer.name === "Rock"? "Lose": "Win"
+  }
 
   const randomChoice = () => {
     let itemArray = Object.keys(choice)// 객체의 키값만을 배열로 만듬
@@ -36,8 +46,8 @@ function App() {
   return (
     <div>
       <div className='main'>
-        <Box title="You" item={userSelect}/>
-        <Box title="Computer" item={computerSelect}/>
+        <Box title="You" item={userSelect} result={result}/>
+        <Box title="Computer" item={computerSelect} result={result}/>
       </div>
       <div className='main'>
         <button onClick={() => play("scissors")}>가위</button>
